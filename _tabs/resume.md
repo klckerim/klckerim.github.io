@@ -9,7 +9,7 @@ This page provides a short professional summary and direct access to my CV.
 # Abdulkerim Kilic
 
 **BACKEND SOFTWARE ENGINEER**  
-+90 507 1108928 | klcabdulkerim@gmail.com | [Linkedin](https://linkedin.com/in/abdulkerimkilic/) | [GitHub](https://github.com/klckerim/) | Istanbul, TR
++90 507 1108928 | klcabdulkerim@gmail.com | [LinkedIn](https://linkedin.com/in/abdulkerimkilic/) | [GitHub](https://github.com/klckerim/) | Istanbul, TR
 
 ---
 
