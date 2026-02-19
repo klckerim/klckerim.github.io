@@ -23,7 +23,7 @@ AI sağlayıcısına yapılan istekleri doğrudan controller içine yazmak yerin
 - loglama ve hata yönetimi merkezileşir,
 - test yazmak daha kolay olur.
 
-## 3) Prompt ve çıktı kontrolü ekley
+## 3) Prompt ve çıktı kontrolü ekle
 Prod ortamında en kritik konu tutarlılıktır. Bunun için:
 - sabit prompt şablonları kullan,
 - JSON gibi yapılandırılmış çıktı,
