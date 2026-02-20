@@ -5,6 +5,9 @@ categories: [Fintech, Payments, Backend]
 tags: ["fintech", "stripe", "checkout", "webhook", "idempotency", "dotnet", "payment"]
 description: "Stripe Checkout, webhook signature verification ve idempotency key propagation ile çift işlem riskini azaltan üretim yaklaşımı."
 author: klckerim
+media_subpath:  /assets/img/posts/headers
+image:
+    path: fintechpayment.png
 ---
 
 Fintech ürünlerinde en pahalı hatalardan biri **aynı finansal etkinin iki kez uygulanmasıdır**. Aynı işlem için iki kez tetiklemek, cüzdan bakiyesinin çift artması veya transferin tekrar yazılması; teknik olarak “retry problemi”, operasyonel olarak güven kaybıdır.

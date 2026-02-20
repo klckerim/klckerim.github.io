@@ -5,6 +5,9 @@ categories: [Backend, AI]
 tags: ["backend", "ai", "api", "entegrasyon", "openai", "dotnet"]
 description: "Backend sistemlere AI özelliklerini kısa ve anlaşılır şekilde entegre etmenin temel adımları."
 author: klckerim
+media_subpath:  /assets/img/posts/headers
+image:
+    path: backendai.png
 ---
 
 Backend tarafında AI entegrasyonu göz korkutucu görünebilir; ama doğru adımlarla oldukça yönetilebilir bir süreçtir.

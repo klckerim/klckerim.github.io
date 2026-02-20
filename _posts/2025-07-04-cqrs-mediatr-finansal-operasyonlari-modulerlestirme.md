@@ -5,6 +5,9 @@ categories: [Backend, Architecture]
 tags: ["cqrs", "mediatr", "fintech", "dotnet", "idempotency", "outbox", "ddd"]
 description: "Deposit, Transfer ve PayBill örnekleriyle finansal operasyonları CQRS + MediatR yaklaşımıyla modülerleştirme."
 author: klckerim
+media_subpath:  /assets/img/posts/headers
+image:
+    path: mediatr.png
 ---
 
 ## (Deposit / Transfer / PayBill Örnekleri)
