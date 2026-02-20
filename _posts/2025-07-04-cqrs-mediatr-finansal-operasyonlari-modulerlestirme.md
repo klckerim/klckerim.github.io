@@ -284,7 +284,7 @@ Finansal işlemlerde "DB’ye yazdım ama event publish edemedim" problemi kriti
 
 Böylece "at-least-once" güvenilirlik modeli gerçek hayata uygun biçimde kurulabilir.
 
-Not: Outbox yaklaşımı sistemin eventual consistency modeline geçmesini gerektirir; bu da bazı akışlarda anlık tutarlılık yerine gecikmeli senkronizasyon anlamına gelir.
+> Not: Outbox yaklaşımı sistemin eventual consistency modeline geçmesini gerektirir; bu da bazı akışlarda anlık tutarlılık yerine gecikmeli senkronizasyon anlamına gelir.
 
 ---
 
@@ -333,4 +333,4 @@ uygulamanın hem bakım maliyetini düşürür hem de üretim güvenilirliğini 
 
 Eğer mevcut kod tabanınızda finansal akışlar tek bir servis içinde sıkıştıysa, küçük bir adımla başlayın: önce sadece `Transfer` akışını command-handler yapısına çıkarın. Genelde ekipler en büyük kazanımı burada görüyor.
 
-Not: `CQRS + MediatR` her sistem için zorunlu değildir. Basit CRUD uygulamalarında gereksiz soyutlama maliyeti yaratabilir. Ancak iş kuralları arttıkça ve finansal risk yükseldikçe ayrıştırılmış bir yapı sürdürülebilirlik açısından ciddi avantaj sağlar.
+> Not: `CQRS + MediatR` her sistem için zorunlu değildir. Basit CRUD uygulamalarında gereksiz soyutlama maliyeti yaratabilir. Ancak iş kuralları arttıkça ve finansal risk yükseldikçe ayrıştırılmış bir yapı sürdürülebilirlik açısından ciddi avantaj sağlar.
