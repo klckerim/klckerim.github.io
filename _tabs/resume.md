@@ -4,7 +4,7 @@ icon: fas fa-file-alt
 order: 3
 ---
 
-This page provides a short professional summary and direct access to my CV.
+This page provides a short professional summary.
 
 # Abdulkerim Kilic
 
@@ -35,12 +35,6 @@ I’m comfortable working with existing systems, understanding constraints, and 
 - Writing maintainable and predictable code
 - Understanding trade-offs in real-world systems
 - Preparing for backend-focused technical interviews
-  
-
-## CV
-
-- 📄 **Download CV**:  [Abdulkerim_Kilic_Cv](/assets/files/ABDULKERIM_KILIC_CV.pdf)
-
 
 
 > This site is intended as a technical and professional reference.
