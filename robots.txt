@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://klckerim.github.io/sitemap.xml
