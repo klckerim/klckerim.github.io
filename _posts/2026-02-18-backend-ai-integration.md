@@ -2,7 +2,7 @@
 title: "Backend AI Integration: Nereden Başlamalı?"
 date: 2026-02-18
 categories: [Backend, AI]
-tags: ["backend", "ai", "api", "entegrasyon", "openai", "dotnet"]
+tags: ["backend", "ai", "api", "openai", "dotnet"]
 description: "Backend sistemlere AI özelliklerini kısa ve anlaşılır şekilde entegre etmenin temel adımları."
 author: klckerim
 media_subpath:  /assets/img/posts/headers

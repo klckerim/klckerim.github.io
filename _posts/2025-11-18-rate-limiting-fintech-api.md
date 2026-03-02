@@ -2,7 +2,7 @@
 title: "Fintech API’lerinde Rate Limiting: Case Study ile Tasarım Prensipleri (Auth, Payments, Webhook)"
 date: 2025-11-18
 categories: [Fintech, Backend, Architecture]
-tags: ["fintech", "rate-limiting", "auth", "payments", "webhook", "dotnet", "api"]
+tags: ["fintech", "rate-limiting", "auth", "payments", "webhook"]
 description: "Case study üzerinden Auth, Payments ve Webhook akışları için rate limiting tasarım prensipleri."
 author: klckerim
 media_subpath: /assets/img/posts/headers
