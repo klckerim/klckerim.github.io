@@ -9,7 +9,7 @@ This page provides a short professional summary.
 # Abdulkerim Kilic
 
 **BACKEND ENGINEER**  
-kerim.kilic.dev@gmail.com | [LinkedIn](https://linkedin.com/in/abdulkerimkilic/) | [GitHub](https://github.com/klckerim/) | Istanbul, TR
+kerim.kilic.dev@gmail.com | [LinkedIn](https://linkedin.com/in/abdulkerimkilic/) | [GitHub](https://github.com/klckerim/)
 
 ---
 
