@@ -7,7 +7,7 @@ description: "Temel system design yaklaşımları ve trade-off'lar."
 author: klckerim
 media_subpath:  /assets/img/posts/headers
 image:
-    path: softwaredesign.png
+    path: softwaredesign1.png
 mermaid: true
 ---
  

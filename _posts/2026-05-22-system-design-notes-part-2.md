@@ -11,7 +11,7 @@ image:
 mermaid: true
 ---
  
-[System Design Notes – 1](https://klckerim.github.io/posts/system-design-notes-part-1/) yazısında tekil bir API'yi yatayda büyütmeyi, load balancer'ı ve cache'i ele almıştık. Ama gerçek sistemlerde asıl zorluk genelde iki yerde ortaya çıkar: **veritabanı katmanı** büyüdüğünde ve **senkron çağrı zincirleri** kırıldığında.
+[System Design Notları – 1](https://klckerim.github.io/posts/system-design-notes-part-1/) yazısında tekil bir API'yi yatayda büyütmeyi, load balancer'ı ve cache'i ele almıştık. Ama gerçek sistemlerde asıl zorluk genelde iki yerde ortaya çıkar: **veritabanı katmanı** büyüdüğünde ve **senkron çağrı zincirleri** kırıldığında.
  
 Bu yazıda üç konuya odaklanıyoruz: veritabanını nasıl büyütürüz (replication & sharding), senkron akışı nasıl asenkrona çeviririz (message queue) ve dağıtık sistemde bir bileşen patladığında nasıl davranırız (idempotency, retry, circuit breaker).
  
