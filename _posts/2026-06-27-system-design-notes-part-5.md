@@ -132,7 +132,7 @@ Bu tablo ezbere değil, oran olarak akılda kalmalı: RAM, SSD'den ~1000x hızl�
 - Günlük veri: 2.5M × 1 KB ≈ 2.5 GB/gün
 - Yıllık veri, 3x replication ile: 2.5 GB × 365 × 3 ≈ 2.7 TB/yıl
 
-Bu sayılar mimari kararı doğrudan etkiliyor: 87 QPS tek bir güçlü Postgres instance'ı için sorun değil, sharding'e muhtemelen bu ölçekte ihtiyaç yok. Ama kullanıcı sayısı 50x büyürse (250M DAU), aynı hesap ~4.350 QPS peak'e çıkar ve sharding gerçek bir gereksinim haline gelir.
+Bu sayılar mimari kararı doğrudan etkiliyor: 87 QPS tek bir güçlü Postgres instance'ı için sorun değil, sharding'e muhtemelen bu ölçekte ihtiyaç yok. Ama kullanıcı sayısı 50x büyürse (250M günlük kullanıcı), aynı hesap ~4.350 QPS peak'e çıkar ve sharding gerçek bir gereksinim haline gelir.
  
 ## Sık Yapılan Hatalar
  

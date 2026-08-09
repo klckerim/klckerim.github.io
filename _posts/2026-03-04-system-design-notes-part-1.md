@@ -13,7 +13,7 @@ mermaid: true
  
 System design, sadece bir endpoint'i çalıştırmak değil, artan trafik, hata senaryoları, gecikme (latency), veri tutarlılığı, operasyon maliyeti ve ekip ölçeği altında sistemin davranışını tasarlamaktır.
  
-> Bu yazıda ele alınanlar: scalability (vertical/horizontal), load balancing stratejileri, caching ve invalidation, SQL vs NoSQL kararı, CAP teoremi ve consistency/availability trade-off'ları — hepsi gerçek dünya (ödeme/auth sistemi) örnekleriyle.
+> Bu yazıda ele alınanlar: scalability (vertical/horizontal), load balancing stratejileri, caching ve invalidation, SQL vs NoSQL kararı, CAP teoremi ve consistency/availability trade-off'ları, hepsi gerçek dünya (ödeme/auth sistemi) örnekleriyle.
 {: .prompt-info }
  
 ## System design gerçek hayatta ne demek?
@@ -109,7 +109,7 @@ Yaygın stratejiler:
 flowchart LR
     U[Users] --> LB["Load Balancer<br/>(health check: /healthz)"]
     LB -->|"/login"| A1["Auth-1<br/>sağlıklı"]
-    LB -.->|"/login — trafik yok"| A2["Auth-2<br/>sağlıksız"]
+    LB -.->|"/login - trafik yok"| A2["Auth-2<br/>sağlıksız"]
     LB -->|"/login"| A3["Auth-3<br/>sağlıklı"]
 ```
  
@@ -244,12 +244,12 @@ Karar çerçevesi:
 
 ## Sık Yapılan Hatalar
  
-1. **Teknolojiyi problemi çözmeden seçmek** — "NoSQL modern, onu kullanalım" yaklaşımı. Doğrusu: erişim paterni, tutarlılık ihtiyacı, operasyon maliyetiyle başla.
-2. **Stateless prensibini atlamak** — Session'ı tekil sunucu belleğinde (instance memory) saklayıp sistemi yatayda büyütmeyi (scale-out) beklemek.
-3. **Cache'i sadece performans feature'ı sanmak** — Invalidation planı olmadan cache eklemek.
-4. **DB darboğazını uygulama katmanında gizlemek** — N+1 query, yanlış index, connection pool sınırlarını gözden kaçırmak.
-5. **CAP ve consistency konularını siyah-beyaz düşünmek** — "Her şey strongly consistent olmalı" veya "eventual her yerde yeterli" uçları.
-6. **Hata senaryosu tasarlamamak** — Dış servis timeout olduğunda sistemin nasıl davranacağını önceden modellememek.
+1. **Teknolojiyi problemi çözmeden seçmek**: "NoSQL modern, onu kullanalım" yaklaşımı. Doğrusu: erişim paterni, tutarlılık ihtiyacı, operasyon maliyetiyle başla.
+2. **Stateless prensibini atlamak**: Session'ı tekil sunucu belleğinde (instance memory) saklayıp sistemi yatayda büyütmeyi (scale-out) beklemek.
+3. **Cache'i sadece performans feature'ı sanmak**: Invalidation planı olmadan cache eklemek.
+4. **DB darboğazını uygulama katmanında gizlemek**: N+1 query, yanlış index, connection pool sınırlarını gözden kaçırmak.
+5. **CAP ve consistency konularını siyah-beyaz düşünmek**: "Her şey strongly consistent olmalı" veya "eventual her yerde yeterli" uçları.
+6. **Hata senaryosu tasarlamamak**: Dış servis timeout olduğunda sistemin nasıl davranacağını önceden modellememek.
 
 ## Özet
  

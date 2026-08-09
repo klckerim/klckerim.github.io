@@ -24,13 +24,13 @@ Circuit breaker reaktiftir, veri akışı zaten patladıktan sonra devreye girer
  
 ### Algoritmalar
  
-| Algoritma              | Nasıl çalışır                                                     | Zayıf nokta                                                                                                        |
-| ---------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Fixed window counter   | Sabit zaman diliminde (ör. her dakika) sayaç tutar                | Pencere sınırında burst'e izin verebilir — 11:59:59'da N istek, 12:00:01'de N istek daha, aynı 2 saniyede 2N istek |
-| Sliding window log     | Her isteğin timestamp'ini tutar, pencereyi kayar şekilde hesaplar | Doğru ama yüksek memory maliyeti                                                                                   |
-| Sliding window counter | Önceki ve şimdiki pencerenin ağırlıklı ortalamasını alır          | Fixed window'a göre daha doğru, tam sliding log kadar pahalı değil — pratikte en dengeli seçim                     |
-| Token bucket           | Bucket sabit hızda dolar, her istek bir token tüketir             | Bucket doluyken burst'e izin verir                                                                                 |
-| Leaky bucket           | İstekler sabit hızda "sızdırılarak" işlenir                       | Burst'e izin vermez, ani trafiği geciktirir                                                                        |
+| Algoritma              | Nasıl çalışır                                                     | Zayıf nokta                                                                                                       |
+| ---------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Fixed window counter   | Sabit zaman diliminde (ör. her dakika) sayaç tutar                | Pencere sınırında burst'e izin verebilir, 11:59:59'da N istek, 12:00:01'de N istek daha, aynı 2 saniyede 2N istek |
+| Sliding window log     | Her isteğin timestamp'ini tutar, pencereyi kayar şekilde hesaplar | Doğru ama yüksek memory maliyeti                                                                                  |
+| Sliding window counter | Önceki ve şimdiki pencerenin ağırlıklı ortalamasını alır          | Fixed window'a göre daha doğru, tam sliding log kadar pahalı değil, pratikte en dengeli seçim                     |
+| Token bucket           | Bucket sabit hızda dolar, her istek bir token tüketir             | Bucket doluyken burst'e izin verir                                                                                |
+| Leaky bucket           | İstekler sabit hızda "sızdırılarak" işlenir                       | Burst'e izin vermez, ani trafiği geciktirir                                                                       |
  
 Token bucket ve leaky bucket sık karıştırılır. Fark şu: **token bucket kısa süreli burst'e izin verir** (bucket doluysa aniden gelen 50 istek anında geçer), **leaky bucket burst'ü asla geçirmez** (ne kadar istek birikirse biriksin, çıkış hızı sabittir). Kullanıcı deneyimi öncelikliyse (ör. API client'ların ara sıra patlama yapmasına izin ver) token bucket; downstream'i sabit hızda beslemek önceliliyse (ör. bir batch processing hattı) leaky bucket daha uygun.
  
@@ -69,7 +69,7 @@ flowchart LR
 Tipik sorumluluklar:
  
 - **Authentication:** Token'ı bir kere doğrula, arkadaki servisler tekrar doğrulamak zorunda kalmasın.
-- **Rate limiting:** Merkezi enforcement noktası — dağıtık sayaç problemini tek bir yerde çöz.
+- **Rate limiting:** Merkezi enforcement noktası, dağıtık sayaç problemini tek bir yerde çöz.
 - **Routing:** İsteği doğru servise yönlendir, versiyon/path bazlı yönlendirme yap.
 - **TLS termination, request/response transformation.**
 - **Log/metrik toplama noktası:** Her isteğin sisteme girdiği yer, bir sonraki bölümdeki correlation ID'nin doğal doğum yeri.
@@ -93,19 +93,19 @@ Gateway'in kendisi de bir servis, horizontal scaling ve stateless prensipleri on
  
 ### Logging
  
-- Serbest metin yerine **structured log** (JSON) kullan — sonradan sorgulanabilir olması gerekir.
+- Serbest metin yerine **structured log** (JSON) kullan, sonradan sorgulanabilir olması gerekir.
 - Her log satırında request/trace ID bulunmalı.
-- PII ve secret'ları loglama — "detaylı log" iyi niyetle atılır ama audit/compliance riski yaratır.
+- PII ve secret'ları loglama, "detaylı log" iyi niyetle atılır ama audit/compliance riski yaratır.
 
 ### Metrics
  
 - **RED method** (servisler için): Rate, Errors, Duration.
 - **USE method** (kaynaklar için): Utilization, Saturation, Errors.
-- Counter (sadece artan), gauge (anlık değer), histogram (dağılım — ör. p50/p95/p99 latency); p99'u atlayıp sadece ortalamaya bakmak yaygın bir hatadır, ortalama iyi görünse de kullanıcıların %1'i çok kötü bir deneyim yaşıyor olabilir.
+- Counter (sadece artan), gauge (anlık değer), histogram (dağılım, ör. p50/p95/p99 latency); p99'u atlayıp sadece ortalamaya bakmak yaygın bir hatadır, ortalama iyi görünse de kullanıcıların %1'i çok kötü bir deneyim yaşıyor olabilir.
 
 ### Tracing ve correlation ID
  
-Gateway'de üretilen bir `trace_id`, isteğin geçtiği her servise (HTTP header ile) ve her mesaj kuyruğuna (mesaj metadata'sı ile) taşınır. Her adım kendi **span**'ini bu trace_id altında kaydeder — başlama zamanı, bitiş zamanı, süre.
+Gateway'de üretilen bir `trace_id`, isteğin geçtiği her servise (HTTP header ile) ve her mesaj kuyruğuna (mesaj metadata'sı ile) taşınır. Her adım kendi **span**'ini bu trace_id altında kaydeder, başlama zamanı, bitiş zamanı, süre.
  
 ```mermaid
 flowchart LR
@@ -117,7 +117,7 @@ flowchart LR
     Q --> L["Ledger Service"]
 ```
  
-> Correlation ID eklenmezse, production'da beş servisi geçen bir isteğin tam olarak nerede yavaşladığını bulmak günler sürebilir — her servisin logunu zaman damgasına göre elle eşleştirmek zorunda kalırız.
+> Correlation ID eklenmezse, production'da beş servisi geçen bir isteğin tam olarak nerede yavaşladığını bulmak günler sürebilir, her servisin logunu zaman damgasına göre elle eşleştirmek zorunda kalırız.
 {: .prompt-tip }
  
 Bir trade-off var: yüksek QPS'te her isteği %100 trace etmek maliyetli (storage + network overhead). Pratik yaklaşım: normal trafiği düşük oranda örnekleyip (ör. %1-5), ama hataları ve yavaş istekleri (ör. p95 üstü) her zaman %100 trace etmek. Hiç sample yapmadan sadece hataları loglamak da yeterli değil, normal isteklerin latency dağılımını göremeyiz, sorunun ne zaman başladığını geriye dönük tespit edemeyiz.

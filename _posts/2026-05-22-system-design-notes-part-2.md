@@ -36,12 +36,13 @@ flowchart LR
 - Tüm yazılar leader'a gider, okumalar follower'lara dağıtılabilir.
 - Okuma yükünü yatay olarak ölçekler, leader düşerse follower'lardan biri yeni leader olabilir (failover).
 - Zayıf nokta: **replication lag**. Follower, leader'ın gerisinde kalabilir.
-> Kullanıcı ödemeyi yaptı ve hemen ardından transaction listesini yeniledi. İstek bir follower'a gitti ve replication henüz tamamlanmadıysa kullanıcı kendi işlemini göremez ("read your own write" sorunu). Bu, Notes 1'deki consistency/availability trade-off'unun canlı bir örneği.
+
+> Kullanıcı ödemeyi yaptı ve hemen ardından transaction listesini yeniledi. İstek bir follower'a gitti ve replication henüz tamamlanmadıysa kullanıcı kendi işlemini göremez ("read your own write" sorunu). Bu, consistency/availability trade-off'unun canlı bir örneği.
 {: .prompt-warning }
  
 ### Multi-Leader ve Leaderless
  
-- **Multi-Leader:** Birden fazla node yazı kabul eder (genelde multi-region senaryolarda). Yüksek yazma availability'si sağlar ama **conflict resolution** gerektirir — iki bölge aynı kaydı aynı anda güncellerse hangisi kazanır?
+- **Multi-Leader:** Birden fazla node yazı kabul eder (genelde multi-region senaryolarda). Yüksek yazma availability'si sağlar ama **conflict resolution** gerektirir, iki bölge aynı kaydı aynı anda güncellerse hangisi kazanır?
 - **Leaderless (Dynamo tarzı, ör. Cassandra):** Sabit bir leader yoktur; yazma ve okuma **quorum** ile yapılır. N kopya arasından en az W tanesine yazıp en az R tanesinden veri okunursa ve `W + R > N` ise, okunan kopyalardan en az biri en güncel yazıyı içerir. N/W/R değerlerini ayarlayarak "hangi durumda ne kadar tutarlılık istiyorum" kararı verilir, bu da uygulama tarafında ek bir karmaşıklık demektir.
 
 | Model           | Yazma availability       | Karmaşıklık                  | Tipik kullanım                         |
@@ -62,16 +63,16 @@ flowchart LR
     H -->|shard 2| S2[(Shard 2)]
 ```
  
-| Strateji                         | Artı                                      | Eksi                                                |
-| -------------------------------- | ----------------------------------------- | --------------------------------------------------- |
-| Range-based                      | Sıralı sorgular (ör. tarih aralığı) kolay | Hot range riski — yeni kayıtlar tek shard'a yığılır |
-| Hash-based                       | Yük dengeli dağılır                       | Range query zorlaşır, resharding maliyetli          |
-| Directory-based (lookup service) | Esnek, shard'lar arası taşıma kolay       | Lookup servisi kendisi tek hata noktası olabilir    |
+| Strateji                         | Artı                                      | Eksi                                               |
+| -------------------------------- | ----------------------------------------- | -------------------------------------------------- |
+| Range-based                      | Sıralı sorgular (ör. tarih aralığı) kolay | Hot range riski, yeni kayıtlar tek shard'a yığılır |
+| Hash-based                       | Yük dengeli dağılır                       | Range query zorlaşır, resharding maliyetli         |
+| Directory-based (lookup service) | Esnek, shard'lar arası taşıma kolay       | Lookup servisi kendisi tek hata noktası olabilir   |
  
 İki pratik tuzak:
  
 - **Hot partition:** Shard key'i yanlış seçilirse (ör. tüm büyük müşterileri tek shard'a düşüren bir key), o shard darboğaz olur.
-- **Resharding acısı:** Shard sayısını değiştirmek veri taşımayı gerektirir. Notes 1'de load balancer için bahsettiğimiz **consistent hashing**, burada da devreye girer — shard sayısı değiştiğinde taşınması gereken veri miktarını azaltır.
+- **Resharding acısı:** Shard sayısını değiştirmek veri taşımayı gerektirir. Load balancer için bahsettiğimiz **consistent hashing**, burada da devreye girer, shard sayısı değiştiğinde taşınması gereken veri miktarını azaltır.
 
 ## 3. Senkrondan Asenkrona: Message Queue & Event-Driven Mimari
  
@@ -112,7 +113,7 @@ Client aynı isteği (network timeout, retry, kullanıcı çift tıklama vb. yü
 1. Client, her mantıksal işlem için benzersiz bir key üretir: `Idempotency-Key: abc123`
 2. Sunucu bu key'i daha önce gördü mü diye kontrol eder.
 3. Görmediyse işlemi yapar ve sonucu key ile birlikte saklar.
-4. Client timeout sonrası aynı key ile retry atarsa, sunucu işlemi tekrar çalıştırmaz — saklanan sonucu döner.
+4. Client timeout sonrası aynı key ile retry atarsa, sunucu işlemi tekrar çalıştırmaz, saklanan sonucu döner.
 Bu pattern olmadan retry eklemek, tam olarak önlemeye çalıştığımız hatayı üretir.
  
 ### Retry + Exponential Backoff + Jitter
@@ -137,17 +138,17 @@ stateDiagram-v2
 - **Closed:** İstekler normal akar, hata oranı izlenir.
 - **Open:** Eşik aşıldığında istekler downstream'e hiç gitmez, hemen hata/fallback döner.
 - **Half-Open:** Belirli bir süre sonra az sayıda deneme yapılır; başarılıysa Closed'a döner, başarısızsa tekrar Open'a geçer.
-> Retry, idempotency olmadan güvenli değildir; circuit breaker da retry'ı sınırlamadan yeterli değildir. Üçü birlikte düşünülmeli — biri eksikse diğer ikisi de yarım iş görür.
+> Retry, idempotency olmadan güvenli değildir; circuit breaker da retry'ı sınırlamadan yeterli değildir. Üçü birlikte düşünülmeli, biri eksikse diğer ikisi de yarım iş görür.
 {: .prompt-danger }
  
 ## Sık Yapılan Hatalar
  
-1. **Retry eklerken idempotency'i unutmak** — duplicate side effect (ör. çift ödeme çekimi) ile sonuçlanır.
-2. **Backoff'ta jitter kullanmamak** — retry'lar senkronize kalır, thundering herd riski devam eder.
-3. **Message queue'yu "sihirli tutarlılık" sanmak** — varsayılan at-least-once'tur, consumer idempotent olmak zorundadır.
-4. **Shard key'i sorgu paternine göre seçmemek** — hot shard oluşur, cross-shard join ihtiyacı patlar.
-5. **Circuit breaker'ı sadece HTTP çağrılarına uygulayıp DB/queue bağlantılarını atlamak** — darboğaz sadece dış API'lerde olmuyor.
-6. **Replication lag'i yok saymak** — "read your own write" senaryolarını test etmeden production'a çıkmak.
+1. **Retry eklerken idempotency'i unutmak**, duplicate side effect (ör. çift ödeme çekimi) ile sonuçlanır.
+2. **Backoff'ta jitter kullanmamak**, retry'lar senkronize kalır, thundering herd riski devam eder.
+3. **Message queue'yu "sihirli tutarlılık" sanmak**, varsayılan at-least-once'tur, consumer idempotent olmak zorundadır.
+4. **Shard key'i sorgu paternine göre seçmemek**, hot shard oluşur, cross-shard join ihtiyacı patlar.
+5. **Circuit breaker'ı sadece HTTP çağrılarına uygulayıp DB/queue bağlantılarını atlamak**, darboğaz sadece dış API'lerde olmuyor.
+6. **Replication lag'i yok saymak**, "read your own write" senaryolarını test etmeden production'a çıkmak.
 
 ## Özet
  

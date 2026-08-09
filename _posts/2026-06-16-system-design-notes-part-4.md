@@ -74,7 +74,7 @@ sequenceDiagram
 - **Prepare fazı:** Coordinator herkese sorar, herkes kaynağı kilitler ve oy verir.
 - **Commit fazı:** Herkes "evet" dediyse coordinator commit emri verir; biri "hayır" derse herkese abort emri verir.
 
-> Coordinator, tüm taraflar "evet" dedikten sonra ama commit emri gönderemeden çökerse, katılımcılar kilidi ne zaman bırakacaklarını bilemez — kaynaklar süresiz kilitli kalabilir. Bu yüzden 2PC **blocking** bir protokoldür ve coordinator tek hata noktasıdır.
+> Coordinator, tüm taraflar "evet" dedikten sonra ama commit emri gönderemeden çökerse, katılımcılar kilidi ne zaman bırakacaklarını bilemez, kaynaklar süresiz kilitli kalabilir. Bu yüzden 2PC **blocking** bir protokoldür ve coordinator tek hata noktasıdır.
 {: .prompt-danger }
  
 CAP teoremiyle doğrudan bağlantılı: 2PC consistency'yi garanti etmek için availability'den taviz verir, coordinator veya herhangi bir katılımcı partition'a uğradığında sistem kilitlenir, cevap vermez. Çoğu mikroservis mimarisi bu trade-off'u kabul edemez; bu yüzden 2PC pratikte tek bir veritabanı içindeki transaction'larla sınırlı kalır, servisler arası pek kullanılmaz.
